@@ -149,7 +149,7 @@ resource "aws_security_group" "pub_ssh_sg" {
 
 # EC2 Instance
 resource "aws_instance" "ec2" {
-  ami                         = "ami-0a22e6228541105a0"
+  ami                         = "ami-03e0b06f01d45a4eb"
   subnet_id                   = aws_subnet.public.id
   instance_type               = "t3.micro"
   associate_public_ip_address = true
