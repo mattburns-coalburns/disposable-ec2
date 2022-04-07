@@ -34,7 +34,7 @@ provider "tls" {}
 
 # Change this to add a Prefix that explains whatever you're testing
 variable "prefix" {
-  default = "aws"
+  default = "disposable"
 }
 
 variable "region" {
@@ -57,14 +57,14 @@ resource "tls_private_key" "key" {
 
 # Saves the private .pem file locally
 resource "local_file" "key" {
-  filename        = "${var.prefix}-key.pem"
+  filename        = "disposable-key.pem"
   file_permission = 0400
   content         = tls_private_key.key.private_key_pem
 }
 
-# Provides Public key to the Web Server EC2 instance
+# Provides Public key to the EC2 instance
 resource "aws_key_pair" "key" {
-  key_name   = "${var.prefix}-key"
+  key_name   = "disposable-key"
   public_key = tls_private_key.key.public_key_openssh
 }
 
@@ -149,9 +149,9 @@ resource "aws_security_group" "pub_ssh_sg" {
 
 # EC2 Instance
 resource "aws_instance" "ec2" {
-  ami                         = "ami-0c02fb55956c7d316"
+  ami                         = "ami-0a22e6228541105a0"
   subnet_id                   = aws_subnet.public.id
-  instance_type               = "t2.micro"
+  instance_type               = "t3.micro"
   associate_public_ip_address = true
   key_name = aws_key_pair.key.key_name
   vpc_security_group_ids = [
