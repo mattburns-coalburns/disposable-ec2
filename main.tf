@@ -34,7 +34,7 @@ provider "tls" {}
 
 # Change this to add a Prefix that explains whatever you're testing
 variable "prefix" {
-  default = "matt-eks-test"
+  default = "aws"
 }
 
 variable "region" {
@@ -148,12 +148,12 @@ resource "aws_security_group" "pub_ssh_sg" {
 ###############################
 
 # EC2 Instance
-resource "aws_instance" "web" {
-  ami                         = "ami-0a22e6228541105a0"
+resource "aws_instance" "ec2" {
+  ami                         = "ami-0c02fb55956c7d316"
   subnet_id                   = aws_subnet.public.id
-  instance_type               = "t3.micro"
+  instance_type               = "t2.micro"
   associate_public_ip_address = true
-  key_name = aws_key_pair.web.key_name
+  key_name = aws_key_pair.key.key_name
   vpc_security_group_ids = [
     aws_security_group.pub_ssh_sg.id
   ]
@@ -179,5 +179,5 @@ resource "aws_instance" "web" {
 #           Outputs           #
 ###############################
 output "ssh" {
-  value = "ssh -i ${local_file.web.filename} ec2-user@${aws_instance.web.public_ip}"
+  value = "ssh -i ${local_file.key.filename} ec2-user@${aws_instance.ec2.public_ip}"
 }
